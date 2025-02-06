@@ -94,38 +94,56 @@ namespace AnsExam2
             {
                 Console.Clear();
                 Console.WriteLine($"Enter details for Question {i + 1}:");
-                Console.Write("Choose type (1 for True/False, 2 for MCQ): ");
-                int questionType = int.Parse(Console.ReadLine());
+
+                int questionType;
+                do
+                {
+                    Console.Write("Choose type (1 for True/False, 2 for MCQ): ");
+                } while (!int.TryParse(Console.ReadLine(), out questionType) || (questionType != 1 && questionType != 2));
 
                 Console.Write("Enter question body: ");
                 string body = Console.ReadLine();
 
-                Console.Write("Enter question mark: ");
-                double mark = double.Parse(Console.ReadLine());
+                double mark;
+                do
+                {
+                    Console.Write("Enter question mark: ");
+                } while (!double.TryParse(Console.ReadLine(), out mark));
 
                 Question question;
                 if (questionType == 1)
                 {
                     question = new TrueFalseQuestion($"Q{i + 1} (True/False)", body, mark);
-                    Console.Write("Enter correct answer (1 for True, 2 for False): ");
-                    int correctAnswer = int.Parse(Console.ReadLine());
+
+                    int correctAnswer;
+                    do
+                    {
+                        Console.Write("Enter correct answer (1 for True, 2 for False): ");
+                    } while (!int.TryParse(Console.ReadLine(), out correctAnswer) || (correctAnswer != 1 && correctAnswer != 2));
+
                     question.RightAnswer = question.AnswerList[correctAnswer - 1];
                 }
                 else
                 {
                     question = new MCQOneChoice($"Q{i + 1} (MCQ)", body, mark);
-                    for (int j = 0; j < 3; j++) 
+
+                    for (int j = 0; j < 3; j++)
                     {
-                        Console.Write($"Enter choice {j + 1}: ");
+                        Console.Write($"Enter choices {j + 1}: ");
                         string answerText = Console.ReadLine();
                         question.AnswerList.Add(new Answer(j + 1, answerText));
                     }
-                    Console.Write("Enter correct answer number: ");
-                    int correctAnswer = int.Parse(Console.ReadLine());
+
+                    int correctAnswer;
+                    do
+                    {
+                        Console.Write("Enter correct answer number (1, 2, or 3): ");
+                    } while (!int.TryParse(Console.ReadLine(), out correctAnswer) || correctAnswer < 1 || correctAnswer > 3);
+
                     question.RightAnswer = question.AnswerList[correctAnswer - 1];
                 }
 
-                
+
                 Exam.Questions.Add(question);
             }
 
