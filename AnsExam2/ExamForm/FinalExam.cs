@@ -27,7 +27,7 @@ namespace AnsExam2.ExamForm
                 {
                     Console.WriteLine("Your answer: ");
                 }
-                while(int.TryParse(Console.ReadLine(), out userAnswer));
+                while(!int.TryParse(Console.ReadLine(), out userAnswer));
 
                 if (question.AnswerList.Find(ans => ans.AnswerId == userAnswer) == question.RightAnswer)
                 {

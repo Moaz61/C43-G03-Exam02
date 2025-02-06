@@ -28,7 +28,7 @@ namespace AnsExam2.ExamForm
                 {
                     Console.Write("Your answer: ");
                 }
-                while (int.TryParse(Console.ReadLine(), out userAnswer));
+                while (!int.TryParse(Console.ReadLine(), out userAnswer));
 
                 Console.WriteLine($"Correct answer was: {question.RightAnswer.AnswerText}\n");
             }
