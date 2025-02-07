@@ -9,7 +9,7 @@ namespace AnsExam2.ExamForm
 {
     internal class PracticalExam : Exam
     {
-        public PracticalExam(TimeSpan time, int numofque) : base(time, numofque)
+        public PracticalExam(TimeSpan time, int numofque , List<Question> questions) : base(time, numofque , questions)
         {
         }
 
@@ -26,9 +26,9 @@ namespace AnsExam2.ExamForm
 
                 do
                 {
-                    Console.Write("Your answer: ");
+                    Console.WriteLine("Your answer: ");
                 }
-                while (!int.TryParse(Console.ReadLine(), out userAnswer));
+                while (!int.TryParse(Console.ReadLine(), out userAnswer) || userAnswer < 1 || userAnswer > 3);
 
                 Console.WriteLine($"Correct answer was: {question.RightAnswer.AnswerText}\n");
             }

@@ -48,106 +48,134 @@ namespace AnsExam2
             } while (true);
 
             TimeSpan timeSpan = TimeSpan.FromMinutes(duration);
+            List<Question> questions = new List<Question>();
 
             if (examType == 1)
             {
-                Exam = new FinalExam(timeSpan, numQuestions);
+                for (int i = 0; i < numQuestions; i++)
+                {
+                    Console.Clear();
+                    int questionType;
+                    do
+                    {
+                        Console.Write("Choose type (1 for True/False, 2 for MCQ): ");
+                    } while (!int.TryParse(Console.ReadLine(), out questionType) || (questionType != 1 && questionType != 2));
+
+                    string body;
+                    do
+                    {
+                        Console.Write("Enter question body: ");
+                        body = Console.ReadLine();
+                    } while (string.IsNullOrWhiteSpace(body));
+
+                    double mark;
+                    do
+                    {
+                        Console.Write("Enter question mark: ");
+                    } while (!double.TryParse(Console.ReadLine(), out mark) || mark <= 0);
+
+                    if (questionType == 1)
+                    {
+                        int correctAnswer;
+                        do
+                        {
+                            Console.Write("Enter correct answer (1 for True, 2 for False): ");
+                        } while (!int.TryParse(Console.ReadLine(), out correctAnswer) || (correctAnswer != 1 && correctAnswer != 2));
+
+                        string correctAnswerTxt = correctAnswer == 1 ? "True" : "False";
+
+                        Answer RightAnswer = new Answer(correctAnswer, correctAnswerTxt);
+
+                        TrueFalseQuestion trueFalseQuestion = new TrueFalseQuestion(body, mark, RightAnswer);
+
+                        questions.Add(trueFalseQuestion);
+                    }
+                    else
+                    {
+                        List<Answer> answerList = new List<Answer>();
+
+                        for (int j = 0; j < 3; j++)
+                        {
+                            string answerText;
+                            do
+                            {
+                                Console.Write($"Enter choices {j + 1}: ");
+                                answerText = Console.ReadLine();
+                            }while (string.IsNullOrWhiteSpace(answerText));
+
+                            Answer choicesID = new Answer(j + 1, answerText);
+
+                            answerList.Add(choicesID);
+                        }
+                        int correctAnswer;
+                        do
+                        {
+                            Console.Write("Enter correct answer number (1, 2, or 3): ");
+                        } while (!int.TryParse(Console.ReadLine(), out correctAnswer) || correctAnswer < 1 || correctAnswer > 3);
+
+                        string RightAnswerTxt = answerList[correctAnswer - 1].AnswerText;
+
+                        Answer answer = new Answer(correctAnswer, RightAnswerTxt);
+
+                        MCQChoice MCQ = new MCQChoice(body, mark, answerList, answer);
+
+                        questions.Add(MCQ);
+                        Console.Clear();
+                    }
+                }
+                Exam = new FinalExam(timeSpan, numQuestions, questions);
             }
 
             else
             {
-                Exam = new PracticalExam(timeSpan, numQuestions);
-
-                //for(int i = 0; i < numQuestions; i++)
-                //{
-                //    Console.Clear();
-                //    Console.WriteLine($"Enter details for Question {i + 1}:");
-                //    Console.Write("Choose type (1 for MCQ): ");
-                //    int questionType = int.Parse(Console.ReadLine());
-
-                //    Console.Write("Enter question body: ");
-                //    string body = Console.ReadLine();
-
-                //    Console.Write("Enter question mark: ");
-                //    double mark = double.Parse(Console.ReadLine());
-
-                //    Question question;
-                //    if (questionType == 1)
-                //    {
-                //        question = new MCQMultilpeChoice($"Q{i + 1} (MCQ)", body, mark);
-                //        for (int j = 0; j < 3; j++)
-                //        {
-                //            Console.Write($"Enter choice {j + 1}: ");
-                //            string answerText = Console.ReadLine();
-                //            question.AnswerList.Add(new Answer(j + 1, answerText));
-                //        }
-                //        Console.Write("Enter correct answer number: ");
-                //        int correctAnswer = int.Parse(Console.ReadLine());
-                //        question.RightAnswer = question.AnswerList[correctAnswer - 1];
-                //    }
-
-                //    Exam.Questions.Add(question);
-                //}
-            }
-
-            for (int i = 0; i < numQuestions; i++)
-            {
-                Console.Clear();
-                Console.WriteLine($"Enter details for Question {i + 1}:");
-
-                int questionType;
-                do
+                for (int i = 0; i < numQuestions; i++)
                 {
-                    Console.Write("Choose type (1 for True/False, 2 for MCQ): ");
-                } while (!int.TryParse(Console.ReadLine(), out questionType) || (questionType != 1 && questionType != 2));
+                    Console.Clear();
 
-                Console.Write("Enter question body: ");
-                string body = Console.ReadLine();
+                    string body;
+                    do 
+                    {
+                        Console.Write($"Enter question {i + 1} body: ");
+                        body = Console.ReadLine();
+                    }while (string.IsNullOrWhiteSpace(body));
 
-                double mark;
-                do
-                {
-                    Console.Write("Enter question mark: ");
-                } while (!double.TryParse(Console.ReadLine(), out mark));
-
-                Question question;
-                if (questionType == 1)
-                {
-                    question = new TrueFalseQuestion($"Q{i + 1} (True/False)", body, mark);
-
-                    int correctAnswer;
+                    double mark;
                     do
                     {
-                        Console.Write("Enter correct answer (1 for True, 2 for False): ");
-                    } while (!int.TryParse(Console.ReadLine(), out correctAnswer) || (correctAnswer != 1 && correctAnswer != 2));
+                        Console.Write("Enter question mark: ");
+                    } while (!double.TryParse(Console.ReadLine(), out mark) || mark <= 0);
 
-                    question.RightAnswer = question.AnswerList[correctAnswer - 1];
-                }
-                else
-                {
-                    question = new MCQOneChoice($"Q{i + 1} (MCQ)", body, mark);
+                    List<Answer> answerList = new List<Answer>();
 
                     for (int j = 0; j < 3; j++)
                     {
-                        Console.Write($"Enter choices {j + 1}: ");
-                        string answerText = Console.ReadLine();
-                        question.AnswerList.Add(new Answer(j + 1, answerText));
-                    }
+                        string answerTxt;
+                        do
+                        {
+                            Console.Write($"Enter choices {j + 1}: ");
+                            answerTxt = Console.ReadLine();
+                        }while (string.IsNullOrWhiteSpace(answerTxt));
 
+                        Answer choicesID = new Answer(j + 1, answerTxt);
+
+                        answerList.Add(choicesID);
+                    }
                     int correctAnswer;
                     do
                     {
                         Console.Write("Enter correct answer number (1, 2, or 3): ");
                     } while (!int.TryParse(Console.ReadLine(), out correctAnswer) || correctAnswer < 1 || correctAnswer > 3);
 
-                    question.RightAnswer = question.AnswerList[correctAnswer - 1];
+                    String RightAnswerTxt = answerList[correctAnswer - 1].AnswerText;
+
+                    Answer answer = new Answer(correctAnswer, RightAnswerTxt);
+
+                    MCQChoice MCQ = new MCQChoice(body, mark, answerList, answer);
+
+                    questions.Add(MCQ);
                 }
-
-
-                Exam.Questions.Add(question);
+                Exam = new PracticalExam(timeSpan, numQuestions, questions);
             }
-
-            Console.Clear();
         }
     }
 }

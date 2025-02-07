@@ -8,15 +8,13 @@ namespace AnsExam2.ExamQuestions
 {
     internal class TrueFalseQuestion : Question
     {
-        public TrueFalseQuestion(string header, string body, double mark) : base(header, body, mark)
+        public TrueFalseQuestion(string body, double mark, Answer RightAnswer) : base("True or False Question", body, mark, new List<Answer> { new Answer(1, "True"), new Answer(2, "False") }, RightAnswer)
         {
-            AnswerList.Add(new Answer(1, "True"));
-            AnswerList.Add(new Answer(2, "False"));
         }
 
-        public override object Clone()
+        public override string ToString()
         {
-            return new TrueFalseQuestion(this.Header, this.Body, this.Mark);
+            return $"\nTrue/False Question: {Body}             Mark: {Mark}";
         }
     }
 }

@@ -12,11 +12,11 @@ namespace AnsExam2.ExamForm
         public TimeSpan Time {  get; set; }
         public int NumberOfQuestions {  get; set; }
         public List<Question> Questions { get; set; }
-        public Exam(TimeSpan time , int numofque)
+        public Exam(TimeSpan time , int numofque , List<Question> questions)
         {
             this.Time = time;
             this.NumberOfQuestions = numofque;
-            Questions = new List<Question>();
+            this.Questions = questions;
         }
 
         public abstract void ShowExam();
